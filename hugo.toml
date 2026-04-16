@@ -1,4 +1,4 @@
-baseURL = "https://example.org/"
+baseURL = "https://hudengfenglai.github.io/blog/"
 languageCode = "zh-CN"
 defaultContentLanguage = "zh-CN"
 title = "等风来"
@@ -156,3 +156,7 @@ show_update_time = true
   startLevel = 2
   endLevel = 4
   ordered = false
+
+[caches]
+  [caches.images]
+    dir = ":cacheDir/images"
