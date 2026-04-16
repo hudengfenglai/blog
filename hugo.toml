@@ -36,11 +36,11 @@ theme = "hugo-theme-reimu"
 
   [[params.home_categories.content]]
     categories = "学习笔记"
-    cover = "images/categories/study.webp"
+    cover = "images/categories/reading-notes.png"
 
   [[params.home_categories.content]]
     categories = "分享"
-    cover = "images/categories/share.webp"
+    cover = "images/categories/share.png"
 
 mainSections = ["post"]
 dateFormat = "2006-01-02"
@@ -97,17 +97,17 @@ show_update_time = true
   empty_posts_description = "继续在 content/post/ 下补充内容后，首页文章流和归档时间线会自动完整呈现。"
 
   [[params.showcase.home.topics]]
-    title = "学习笔记"
+    title = "读书笔记"
     category = "学习笔记"
-    description = "整理 Hugo、前端与开发笔记。"
-    cover = "images/categories/study.webp"
+    description = "收纳阅读札记、摘抄与书单整理。"
+    cover = "images/categories/reading-notes.png"
     tag = "Focus"
 
   [[params.showcase.home.topics]]
     title = "分享"
     category = "分享"
     description = "放置项目记录、折腾过程和杂项想法。"
-    cover = "images/categories/share.webp"
+    cover = "images/categories/share.png"
     tag = "Notes"
 
 [params.showcase.archive]
