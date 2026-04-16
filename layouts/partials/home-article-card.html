@@ -1,0 +1,89 @@
+{{- $page := .page -}}
+{{- $ctx := .ctx -}}
+{{- $href := $page.RelPermalink -}}
+{{- $isExternal := false -}}
+{{- with $page.Params.link -}}
+  {{- $href = . -}}
+  {{- $isExternal = true -}}
+{{- end -}}
+{{- $cover := partial "helpers/showcase-cover-image.html" (dict "ctx" $page "kind" "post") -}}
+{{- $summary := $page.Params.description | default ($page.Summary | plainify) | default ($page.Plain | plainify) -}}
+{{- $summary = $summary | strings.TrimSpace | truncate 170 -}}
+
+<article class="home-article-card">
+  <a
+    class="article-card-link"
+    href="{{ $href }}"
+    title="{{ $page.Title }}"
+    aria-label="{{ $page.Title }}"
+    {{ if $isExternal }}target="_blank" rel="noopener nofollow noreferrer"{{ end }}
+  ></a>
+
+  <div class="article-card-cover">
+    {{- if $cover -}}
+      <img data-src="{{ $cover | relURL }}" src="{{ $cover | relURL }}" class="lazyload article-cover-image" alt="{{ $page.Title }}" />
+    {{- else -}}
+      <div class="article-cover-fallback">
+        <span>{{ $page.Title }}</span>
+      </div>
+    {{- end -}}
+    <div class="article-cover-overlay"></div>
+  </div>
+
+  <div class="article-card-content">
+    <div class="article-meta">
+      <span class="article-meta-item">{{ $page.Date.Format $ctx.Site.Params.dateFormat }}</span>
+      <span class="article-meta-item">{{ $page.WordCount }} 字</span>
+      <span class="article-meta-item">{{ $page.ReadingTime }} 分钟</span>
+      {{- with $page.Params.categories -}}
+        {{- if reflect.IsSlice . -}}
+          {{- with index . 0 -}}
+            <span class="article-meta-item">分类 · {{ . }}</span>
+          {{- end -}}
+        {{- else -}}
+          <span class="article-meta-item">分类 · {{ . }}</span>
+        {{- end -}}
+      {{- end -}}
+    </div>
+
+    <h3 class="article-card-title">{{ $page.Title }}</h3>
+
+    <div class="article-card-summary">
+      {{- if $summary -}}
+        {{ $summary }}
+      {{- else -}}
+        暂时还没有摘要，补充 front matter 的 description 或正文内容后，这里会自动生成预览。
+      {{- end -}}
+    </div>
+
+    <div class="article-card-footer">
+      <div class="article-taxonomy-group">
+        {{- with $page.Params.categories -}}
+          {{- if reflect.IsSlice . -}}
+            {{- range first 2 . -}}
+              <a class="category-badge" href="{{ printf "categories/%s/" (urlize .) | relLangURL }}" title="{{ . }}">{{ . }}</a>
+            {{- end -}}
+          {{- else -}}
+            <a class="category-badge" href="{{ printf "categories/%s/" (urlize .) | relLangURL }}" title="{{ . }}">{{ . }}</a>
+          {{- end -}}
+        {{- end -}}
+        {{- with $page.Params.tags -}}
+          {{- if reflect.IsSlice . -}}
+            {{- range first 3 . -}}
+              <a class="tag-badge" href="{{ printf "tags/%s/" (urlize .) | relLangURL }}" title="{{ . }}"># {{ . }}</a>
+            {{- end -}}
+          {{- else -}}
+            <a class="tag-badge" href="{{ printf "tags/%s/" (urlize .) | relLangURL }}" title="{{ . }}"># {{ . }}</a>
+          {{- end -}}
+        {{- end -}}
+      </div>
+      <span class="article-card-linktext">{{ if $isExternal }}访问原文{{ else }}继续阅读{{ end }}</span>
+    </div>
+  </div>
+
+  {{- if and $page.Params.weight (or (eq $ctx.Site.Params.sort_order.home "default") (not $ctx.Site.Params.sort_order.home)) -}}
+    <div class="article-sticky-badge">
+      <span class="badge-text">{{ i18n "sticky" }}</span>
+    </div>
+  {{- end -}}
+</article>

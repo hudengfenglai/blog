@@ -1,0 +1,158 @@
+baseURL = "https://example.org/"
+languageCode = "zh-CN"
+defaultContentLanguage = "zh-CN"
+title = "等风来"
+theme = "hugo-theme-reimu"
+
+[languages.zh-CN]
+  languageName = "简体中文"
+  weight = 1
+  hasCJKLanguage = true
+
+[params]
+  author = "等风来"
+  subtitle = "少女祈祷中..."
+  avatar = "avatar.jpg"
+  description = "静待风起 | 疾风知劲草"
+  banner = "images/banner.webp"
+
+[params.sidebar]
+  position = "left"
+  menu = true
+
+[params.sidebar.article]
+  show_common = true
+
+[params.paginate]
+  post = 6
+  archive = 40
+
+[params.sort_order]
+  home = "date-reverse"
+  archive = "date-reverse"
+
+[params.home_categories]
+  enable = true
+
+  [[params.home_categories.content]]
+    categories = "学习笔记"
+    cover = "images/categories/study.webp"
+
+  [[params.home_categories.content]]
+    categories = "分享"
+    cover = "images/categories/share.webp"
+
+mainSections = ["post"]
+dateFormat = "2006-01-02"
+yearFormat = "2006"
+show_update_time = true
+
+[[params.menu]]
+  name = "首页"
+  url = "/"
+  icon = false
+
+[[params.menu]]
+  name = "归档"
+  url = "/archives/"
+  icon = false
+
+[[params.menu]]
+  name = "关于"
+  url = "/about/"
+  icon = false
+
+[[params.menu]]
+  name = "友链"
+  url = "/friend/"
+  icon = false
+
+[params.showcase]
+  banner = "images/banner.webp"
+
+[params.showcase.banners]
+  default = "images/banner.webp"
+  home = "images/banner.webp"
+  archives = "images/banner.webp"
+  about = "images/banner.webp"
+  friend = "images/banner.webp"
+  post = "images/banner.webp"
+
+[params.showcase.modules]
+  home_topics = true
+  home_posts = true
+  post_toc = true
+  post_navigation = true
+  post_related = true
+
+[params.showcase.home]
+  subtitle = "少女祈祷中..."
+  intro = "让首页的专题卡片、文章流与空状态都统一由配置驱动。"
+  topic_limit = 3
+  topics_title = "主题专区"
+  topics_description = "优先从配置中读取专题卡片，没有配置时再回退到现有分类数据。"
+  posts_title = "最新文章"
+  posts_description = "当有公开文章后，首页会自动按照现有 Hugo 数据生成文章卡片流。"
+  empty_posts_title = "暂时还没有公开文章"
+  empty_posts_description = "继续在 content/post/ 下补充内容后，首页文章流和归档时间线会自动完整呈现。"
+
+  [[params.showcase.home.topics]]
+    title = "学习笔记"
+    category = "学习笔记"
+    description = "整理 Hugo、前端与开发笔记。"
+    cover = "images/categories/study.webp"
+    tag = "Focus"
+
+  [[params.showcase.home.topics]]
+    title = "分享"
+    category = "分享"
+    description = "放置项目记录、折腾过程和杂项想法。"
+    cover = "images/categories/share.webp"
+    tag = "Notes"
+
+[params.showcase.archive]
+  title = "归档"
+  description = "按年份自动整理站内公开文章，没有数据时也保持完整的空状态卡片。"
+  empty_title = "归档还在等待第一篇文章"
+  empty_description = "当 content/post/ 下出现公开文章后，这里会自动按年份与月份生成时间线。"
+
+[params.showcase.about]
+  description = "当 content/about.md 填入 Markdown 后，这个页面会直接以统一样式呈现。"
+
+[params.showcase.friend]
+  description = "统一展示本站信息、申请说明与友链卡片网格。"
+  empty_title = "暂时还没有友链数据"
+  empty_description = "可以在 data/friends.yml 中追加友链卡片，页面会自动渲染。"
+
+[params.showcase.post]
+  description = "把单篇文章也纳入同一套 banner + 个人卡 + 阅读卡片 的统一视觉系统。"
+  related_title = "继续阅读"
+  related_description = "同一站内内容会在这里自动继续展开。"
+  related_limit = 3
+  show_banner_excerpt = false
+
+[params.showcase.social]
+  enable = true
+
+  [[params.showcase.social.links]]
+    name = "GitHub"
+    url = "https://github.com/"
+    label = "GH"
+
+  [[params.showcase.social.links]]
+    name = "Bilibili"
+    url = "https://space.bilibili.com/"
+    label = "B"
+
+  [[params.showcase.social.links]]
+    name = "Email"
+    url = "mailto:hello@example.com"
+    label = "@"
+
+[markup.goldmark.renderer]
+  unsafe = true
+
+[markup.tableOfContents]
+  startLevel = 2
+  endLevel = 4
+  ordered = false

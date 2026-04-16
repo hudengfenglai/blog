@@ -1,0 +1,10 @@
+{{- $ctx := .ctx -}}
+<div class="showcase-shell {{ .pageClass }}">
+  <aside class="showcase-sidebar">
+    {{- partial "home-sidebar-card.html" $ctx -}}
+  </aside>
+
+  <section class="showcase-content">
+    {{- partial .inner $ctx -}}
+  </section>
+</div>

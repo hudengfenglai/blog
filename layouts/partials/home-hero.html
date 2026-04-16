@@ -1,0 +1,16 @@
+{{- $params := .Site.Params -}}
+<div class="home-hero">
+    <div class="home-hero-background">
+        {{- if $params.banner -}}
+        <img class="home-hero-bg-image" data-src="{{ $params.banner | relURL }}" alt="博客首页背景"
+            src="{{ $params.banner | relURL }}" />
+        {{- end -}}
+        <div class="home-hero-overlay"></div>
+        <div class="home-hero-gradient"></div>
+    </div>
+
+    <div class="home-hero-content">
+        <h1 class="hero-title">{{ .Site.Title }}</h1>
+        <p class="hero-subtitle">{{ $params.subtitle }}</p>
+    </div>
+</div>

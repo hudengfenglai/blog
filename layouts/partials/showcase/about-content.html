@@ -1,0 +1,68 @@
+{{- $posts := where .Site.RegularPages "Section" "in" .Site.Params.mainSections -}}
+{{- $subtitle := "" -}}
+{{- with .Site.Params.showcase.home.subtitle -}}
+  {{- $subtitle = . -}}
+{{- else -}}
+  {{- with .Site.Params.subtitle -}}
+    {{- if reflect.IsMap . -}}
+      {{- $subtitle = .text | default "" -}}
+    {{- else -}}
+      {{- $subtitle = . -}}
+    {{- end -}}
+  {{- end -}}
+{{- end -}}
+{{- $rawContent := .RawContent | strings.TrimSpace -}}
+
+<div class="showcase-card content-panel about-panel">
+  <div class="section-heading content-panel-heading">
+    <div>
+      <p class="section-kicker">About This Site</p>
+      <h2 class="section-title">{{ .Title }}</h2>
+    </div>
+    <div class="content-meta-group">
+      <span class="content-meta-chip">创建于 {{ .Date.Format .Site.Params.dateFormat }}</span>
+      <span class="content-meta-chip">更新于 {{ .Lastmod.Format .Site.Params.dateFormat }}</span>
+    </div>
+  </div>
+
+  <div class="panel-divider"></div>
+
+  <div class="page-prose">
+    {{- if $rawContent -}}
+      {{ .Content }}
+    {{- else -}}
+      <div class="about-fallback">
+        <div class="about-fallback-intro">
+          <h3>{{ .Site.Params.author | default .Site.Title }}</h3>
+          <p>{{ .Site.Params.description }}</p>
+          {{- with $subtitle -}}
+            <p>{{ . }}</p>
+          {{- end -}}
+        </div>
+
+        <div class="about-fallback-grid">
+          <div class="about-fallback-card">
+            <span class="about-fallback-label">站点名称</span>
+            <strong>{{ .Site.Title }}</strong>
+          </div>
+          <div class="about-fallback-card">
+            <span class="about-fallback-label">文章数量</span>
+            <strong>{{ len $posts }}</strong>
+          </div>
+          <div class="about-fallback-card">
+            <span class="about-fallback-label">分类数量</span>
+            <strong>{{ len .Site.Taxonomies.categories }}</strong>
+          </div>
+          <div class="about-fallback-card">
+            <span class="about-fallback-label">标签数量</span>
+            <strong>{{ len .Site.Taxonomies.tags }}</strong>
+          </div>
+        </div>
+
+        <blockquote>
+          <p>当前 `content/about.md` 还是空的。之后只要填入 Markdown 正文，这里会直接按统一的标题、列表、引用、代码块、表格和图片样式渲染，不需要再额外改模板。</p>
+        </blockquote>
+      </div>
+    {{- end -}}
+  </div>
+</div>

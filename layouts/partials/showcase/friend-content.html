@@ -1,0 +1,48 @@
+{{- $friendCount := len .Site.Data.friends -}}
+{{- $rawContent := .RawContent | strings.TrimSpace -}}
+
+<div class="showcase-card content-panel friend-panel">
+  <div class="section-heading content-panel-heading">
+    <div>
+      <p class="section-kicker">Friend Links</p>
+      <h2 class="section-title">{{ .Title }}</h2>
+    </div>
+    <div class="content-meta-group">
+      <span class="content-meta-chip">{{ $friendCount }} 位友邻</span>
+      <span class="content-meta-chip">更新于 {{ .Lastmod.Format .Site.Params.dateFormat }}</span>
+    </div>
+  </div>
+
+  <div class="panel-divider"></div>
+
+  <div class="friend-site-meta">
+    <div class="friend-site-meta-card">
+      <span class="friend-site-meta-label">本站名称</span>
+      <strong>{{ .Site.Title }}</strong>
+    </div>
+    <div class="friend-site-meta-card">
+      <span class="friend-site-meta-label">站长</span>
+      <strong>{{ .Site.Params.author | default .Site.Title }}</strong>
+    </div>
+    <div class="friend-site-meta-card">
+      <span class="friend-site-meta-label">站点描述</span>
+      <strong>{{ .Site.Params.description }}</strong>
+    </div>
+  </div>
+
+  <div class="page-prose friend-prose">
+    {{- if $rawContent -}}
+      {{ .Content }}
+    {{- else -}}
+      <h2>本站信息</h2>
+      <ul>
+        <li>站点名称：{{ .Site.Title }}</li>
+        <li>站长名称：{{ .Site.Params.author | default .Site.Title }}</li>
+        <li>站点地址：{{ .Site.BaseURL }}</li>
+      </ul>
+      <h2>申请方式</h2>
+      <p>你可以直接维护当前的 friend 页面说明文字，并在 data/friends.yml 中追加友链信息；页面会自动按统一卡片样式渲染。</p>
+      {{- partial "showcase/friend-grid.html" . -}}
+    {{- end -}}
+  </div>
+</div>

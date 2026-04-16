@@ -1,0 +1,31 @@
+{{- $friends := .Site.Data.friends -}}
+{{- $friendCfg := .Site.Params.showcase.friend -}}
+{{- if gt (len $friends) 0 -}}
+  <div class="friend-grid">
+    {{- range $friends -}}
+      {{- $image := .image | default "" -}}
+      {{- if and $image (not (or (strings.HasPrefix $image "http://") (strings.HasPrefix $image "https://") (strings.HasPrefix $image "/"))) -}}
+        {{- $image = $image | relURL -}}
+      {{- end -}}
+      <a class="friend-card" href="{{ .url }}" rel="noopener nofollow noreferrer" target="_blank">
+        <div class="friend-card-media">
+          {{- if $image -}}
+            <img class="friend-card-avatar no-lightbox" src="{{ $image }}" alt="{{ .name }}" />
+          {{- else -}}
+            <div class="friend-card-placeholder">{{ .name }}</div>
+          {{- end -}}
+        </div>
+        <div class="friend-card-body">
+          <h3 class="friend-card-title">{{ .name }}</h3>
+          <p class="friend-card-desc">{{ .desc | default "这里会展示对方站点的简介，没有头像时会自动退回默认占位样式。" }}</p>
+          <span class="friend-card-url">{{ .url | replaceRE "^https?://(www\\.)?" "" | strings.TrimSuffix "/" }}</span>
+        </div>
+      </a>
+    {{- end -}}
+  </div>
+{{- else -}}
+  <div class="page-empty-state friend-empty-state">
+    <h3>{{ $friendCfg.empty_title | default "暂时还没有友链数据" }}</h3>
+    <p>{{ $friendCfg.empty_description | default "可以在 data/friends.yml 中追加友链信息，页面会自动生成友链卡片网格。" }}</p>
+  </div>
+{{- end -}}

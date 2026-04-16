@@ -1,0 +1,41 @@
+{{- $ctx := .ctx | default . -}}
+{{- $showcase := $ctx.Site.Params.showcase -}}
+{{- $kind := .kind | default "" -}}
+{{- $pageFileBase := "" -}}
+{{- with $ctx.File -}}
+  {{- $pageFileBase = .BaseFileName -}}
+{{- end -}}
+
+{{- if not $kind -}}
+  {{- if $ctx.IsHome -}}
+    {{- $kind = "home" -}}
+  {{- else if eq $ctx.Type "archives" -}}
+    {{- $kind = "archives" -}}
+  {{- else if and $ctx.IsPage (in $ctx.Site.Params.mainSections $ctx.Type) -}}
+    {{- $kind = "post" -}}
+  {{- else if eq $pageFileBase "about" -}}
+    {{- $kind = "about" -}}
+  {{- else if eq $pageFileBase "friend" -}}
+    {{- $kind = "friend" -}}
+  {{- else -}}
+    {{- $kind = "default" -}}
+  {{- end -}}
+{{- end -}}
+
+{{- $banner := "" -}}
+{{- with $showcase.banners -}}
+  {{- with index . $kind -}}
+    {{- $banner = . -}}
+  {{- end -}}
+  {{- if not $banner -}}
+    {{- with .default -}}
+      {{- $banner = . -}}
+    {{- end -}}
+  {{- end -}}
+{{- end -}}
+
+{{- if not $banner -}}
+  {{- $banner = $showcase.banner | default $ctx.Site.Params.banner -}}
+{{- end -}}
+
+{{- return $banner -}}

@@ -1,0 +1,10 @@
+{{- $ctx := .ctx | default . -}}
+{{- $currentPath := $ctx.RelPermalink | strings.TrimSuffix "/" -}}
+
+{{- if $ctx.IsHome -}}
+  {{- $currentPath = "" -}}
+{{- else if and $ctx.IsPage (in $ctx.Site.Params.mainSections $ctx.Type) -}}
+  {{- $currentPath = "" -}}
+{{- end -}}
+
+{{- return $currentPath -}}

@@ -1,0 +1,148 @@
+{{- $postCfg := .Site.Params.showcase.post -}}
+{{- $modules := .Site.Params.showcase.modules -}}
+{{- $showTOC := true -}}
+{{- if isset $modules "post_toc" -}}
+  {{- $showTOC = $modules.post_toc -}}
+{{- end -}}
+{{- $showNav := true -}}
+{{- if isset $modules "post_navigation" -}}
+  {{- $showNav = $modules.post_navigation -}}
+{{- end -}}
+{{- $showRelated := true -}}
+{{- if isset $modules "post_related" -}}
+  {{- $showRelated = $modules.post_related -}}
+{{- end -}}
+
+{{- $tocHTML := .TableOfContents | strings.TrimSpace -}}
+{{- $hasTOC := gt (len ($tocHTML | plainify | strings.TrimSpace)) 0 -}}
+{{- $relatedLimit := $postCfg.related_limit | default 3 -}}
+{{- $relatedPages := where .Site.RegularPages "Section" "eq" .Section -}}
+{{- $relatedPages = where $relatedPages "Permalink" "ne" .Permalink -}}
+{{- $relatedPages = $relatedPages.ByDate.Reverse -}}
+
+<article class="showcase-card content-panel post-panel h-entry article" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="post-panel-header">
+    <div class="post-panel-kicker-row">
+      <p class="section-kicker">Article Detail</p>
+      {{- with .Params.series -}}
+        <span class="content-meta-chip">{{ . }}</span>
+      {{- end -}}
+    </div>
+    <h2 class="section-title post-panel-title p-name" itemprop="headline">{{ .Title }}</h2>
+    <div class="post-meta-group">
+      <span class="content-meta-chip">{{ .Date.Format .Site.Params.dateFormat }}</span>
+      {{- if and .Site.Params.show_update_time (ne (.Lastmod.Format .Site.Params.dateFormat) (.Date.Format .Site.Params.dateFormat)) -}}
+        <span class="content-meta-chip">更新于 {{ .Lastmod.Format .Site.Params.dateFormat }}</span>
+      {{- end -}}
+      <span class="content-meta-chip">{{ .WordCount }} 字</span>
+      <span class="content-meta-chip">{{ .ReadingTime }} 分钟阅读</span>
+      {{- with .Params.categories -}}
+        {{- if reflect.IsSlice . -}}
+          {{- range . -}}
+            <a class="content-meta-chip content-meta-link" href="{{ printf "categories/%s/" (urlize .) | relLangURL }}">{{ . }}</a>
+          {{- end -}}
+        {{- else -}}
+          <a class="content-meta-chip content-meta-link" href="{{ printf "categories/%s/" (urlize .) | relLangURL }}">{{ . }}</a>
+        {{- end -}}
+      {{- end -}}
+      {{- with .Params.tags -}}
+        {{- if reflect.IsSlice . -}}
+          {{- range first 4 . -}}
+            <a class="content-meta-chip content-meta-link" href="{{ printf "tags/%s/" (urlize .) | relLangURL }}"># {{ . }}</a>
+          {{- end -}}
+        {{- else -}}
+          <a class="content-meta-chip content-meta-link" href="{{ printf "tags/%s/" (urlize .) | relLangURL }}"># {{ . }}</a>
+        {{- end -}}
+      {{- end -}}
+    </div>
+  </div>
+
+  <div class="panel-divider"></div>
+
+  {{- if and $showTOC $hasTOC -}}
+    <details class="post-toc-card" open>
+      <summary class="post-toc-summary">文章目录</summary>
+      <div class="post-toc-content">
+        {{ $tocHTML | safeHTML }}
+      </div>
+    </details>
+  {{- end -}}
+
+  <div class="page-prose post-prose e-content" itemprop="articleBody">
+    {{ .Content }}
+  </div>
+</article>
+
+{{- if and $showNav (or .PrevInSection .NextInSection) -}}
+  <div class="post-nav-grid">
+    {{- with .PrevInSection -}}
+      {{- $navCover := partial "helpers/showcase-cover-image.html" (dict "ctx" . "kind" "post") -}}
+      <a class="showcase-card post-nav-card" href="{{ .RelPermalink }}">
+        <div class="post-nav-cover">
+          {{- if $navCover -}}
+            <img class="post-nav-cover-image" src="{{ $navCover | relURL }}" alt="{{ .Title }}">
+          {{- else -}}
+            <div class="post-nav-cover-fallback">{{ .Title }}</div>
+          {{- end -}}
+        </div>
+        <div class="post-nav-body">
+          <span class="post-nav-label">上一篇</span>
+          <h3 class="post-nav-title">{{ .Title }}</h3>
+          <p class="post-nav-meta">{{ .Date.Format $.Site.Params.dateFormat }}</p>
+        </div>
+      </a>
+    {{- end -}}
+
+    {{- with .NextInSection -}}
+      {{- $navCover := partial "helpers/showcase-cover-image.html" (dict "ctx" . "kind" "post") -}}
+      <a class="showcase-card post-nav-card" href="{{ .RelPermalink }}">
+        <div class="post-nav-cover">
+          {{- if $navCover -}}
+            <img class="post-nav-cover-image" src="{{ $navCover | relURL }}" alt="{{ .Title }}">
+          {{- else -}}
+            <div class="post-nav-cover-fallback">{{ .Title }}</div>
+          {{- end -}}
+        </div>
+        <div class="post-nav-body">
+          <span class="post-nav-label">下一篇</span>
+          <h3 class="post-nav-title">{{ .Title }}</h3>
+          <p class="post-nav-meta">{{ .Date.Format $.Site.Params.dateFormat }}</p>
+        </div>
+      </a>
+    {{- end -}}
+  </div>
+{{- end -}}
+
+{{- if and $showRelated (gt (len $relatedPages) 0) -}}
+  <div class="showcase-card section-card related-panel">
+    <div class="section-heading related-panel-heading">
+      <div>
+        <p class="section-kicker">Related Posts</p>
+        <h2 class="section-title">{{ $postCfg.related_title | default "继续阅读" }}</h2>
+      </div>
+      <p class="section-description">{{ $postCfg.related_description | default "同一站内内容会在这里自动继续展开。" }}</p>
+    </div>
+
+    <div class="related-post-grid">
+      {{- range first $relatedLimit $relatedPages -}}
+        {{- $relatedCover := partial "helpers/showcase-cover-image.html" (dict "ctx" . "kind" "post") -}}
+        <a class="related-post-card" href="{{ .RelPermalink }}">
+          <div class="related-post-cover">
+            {{- if $relatedCover -}}
+              <img class="related-post-cover-image" src="{{ $relatedCover | relURL }}" alt="{{ .Title }}">
+            {{- else -}}
+              <div class="related-post-cover-fallback">{{ .Title }}</div>
+            {{- end -}}
+          </div>
+          <div class="related-post-body">
+            <span class="related-post-date">{{ .Date.Format $.Site.Params.dateFormat }}</span>
+            <h3 class="related-post-title">{{ .Title }}</h3>
+            <p class="related-post-summary">{{ .Params.description | default (.Summary | plainify | truncate 84) }}</p>
+          </div>
+        </a>
+      {{- end -}}
+    </div>
+  </div>
+{{- end -}}
+
+{{- partial "comment.html" . -}}

@@ -1,0 +1,93 @@
+{{- $posts := where .Site.RegularPages "Section" "in" .Site.Params.mainSections -}}
+{{- $sortConfig := .Site.Params.sort_order.archive | default "date-reverse" -}}
+{{- $groupOrder := "desc" -}}
+{{- if eq $sortConfig "date" -}}
+  {{- $posts = $posts.ByDate -}}
+  {{- $groupOrder = "asc" -}}
+{{- else -}}
+  {{- $posts = $posts.ByDate.Reverse -}}
+{{- end -}}
+
+{{- $pageSize := 0 -}}
+{{- with .Site.Params.paginate.archive -}}
+  {{- $pageSize = . -}}
+{{- end -}}
+{{- $paginator := "" -}}
+{{- if gt $pageSize 0 -}}
+  {{- $paginator = .Paginate $posts $pageSize -}}
+{{- else -}}
+  {{- $paginator = .Paginate $posts -}}
+{{- end -}}
+
+{{- $yearFormat := .Site.Params.yearFormat | default "2006" -}}
+{{- $archiveCfg := .Site.Params.showcase.archive -}}
+{{- $groups := $paginator.Pages.GroupByDate $yearFormat $groupOrder -}}
+
+<div class="showcase-card section-card archive-panel">
+  <div class="section-heading">
+    <div>
+      <p class="section-kicker">Archive Timeline</p>
+      <h2 class="section-title">{{ $archiveCfg.title | default .Title | default "归档" }}</h2>
+    </div>
+    <p class="section-description">{{ $archiveCfg.description | default "按年份自动整理站内公开文章，没有数据时也保持完整的空状态卡片。" }}</p>
+  </div>
+
+  {{- if gt (len $paginator.Pages) 0 -}}
+    <div class="archive-timeline">
+      {{- range $groups -}}
+        <section class="archive-year-block">
+          <div class="archive-year-heading">
+            <span class="archive-year-label">{{ .Key }}</span>
+            <span class="archive-year-count">{{ len .Pages }} 篇</span>
+          </div>
+
+          {{- range .Pages.GroupByDate "01 月" $groupOrder -}}
+            <section class="archive-month-block">
+              <div class="archive-month-heading">{{ .Key }}</div>
+              <div class="archive-list">
+                {{- range .Pages -}}
+                  {{- $archiveHref := .RelPermalink -}}
+                  {{- $external := false -}}
+                  {{- with .Params.link -}}
+                    {{- $archiveHref = . -}}
+                    {{- $external = true -}}
+                  {{- end -}}
+                  <article class="archive-line-item">
+                    <time class="archive-line-date" datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date.Format "01-02" }}</time>
+                    <div class="archive-line-main">
+                      <a class="archive-line-link" href="{{ $archiveHref }}" {{ if $external }}target="_blank" rel="noopener nofollow noreferrer"{{ end }}>
+                        {{ .Title }}
+                      </a>
+                      <div class="archive-line-meta">
+                        <span>{{ .WordCount }} 字</span>
+                        <span>{{ .ReadingTime }} 分钟</span>
+                        {{- with .Params.categories -}}
+                          {{- if reflect.IsSlice . -}}
+                            {{- with index . 0 -}}
+                              <span>{{ . }}</span>
+                            {{- end -}}
+                          {{- else -}}
+                            <span>{{ . }}</span>
+                          {{- end -}}
+                        {{- end -}}
+                      </div>
+                    </div>
+                  </article>
+                {{- end -}}
+              </div>
+            </section>
+          {{- end -}}
+        </section>
+      {{- end -}}
+    </div>
+  {{- else -}}
+    <div class="page-empty-state">
+      <h3>{{ $archiveCfg.empty_title | default "归档还在等待第一篇文章" }}</h3>
+      <p>{{ $archiveCfg.empty_description | default "当 content/post/ 下出现公开文章后，这里会自动按年份与月份生成完整时间线。" }}</p>
+    </div>
+  {{- end -}}
+</div>
+
+{{- if gt $paginator.TotalPages 1 -}}
+  {{- partial "pagination.html" . -}}
+{{- end -}}

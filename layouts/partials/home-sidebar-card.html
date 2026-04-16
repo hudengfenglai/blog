@@ -1,0 +1,165 @@
+{{- $params := .Site.Params -}}
+{{- $showcase := $params.showcase -}}
+{{- $subtitle := "" -}}
+{{- with $showcase.home.subtitle -}}
+  {{- $subtitle = . -}}
+{{- else -}}
+  {{- with $params.subtitle -}}
+    {{- if reflect.IsMap . -}}
+      {{- $subtitle = .text | default "" -}}
+    {{- else -}}
+      {{- $subtitle = . -}}
+    {{- end -}}
+  {{- end -}}
+{{- end -}}
+
+{{- $avatar := $params.avatar | default "" -}}
+{{- if and $avatar (not (or (strings.HasPrefix $avatar "http://") (strings.HasPrefix $avatar "https://") (strings.HasPrefix $avatar "/"))) -}}
+  {{- $avatar = printf "avatar/%s" $avatar -}}
+{{- end -}}
+
+{{- $pageKey := "PROFILE" -}}
+{{- if .IsHome -}}
+  {{- $pageKey = "HOME" -}}
+{{- else if eq .Type "archives" -}}
+  {{- $pageKey = "ARCHIVE" -}}
+{{- else if and .IsPage (in .Site.Params.mainSections .Type) -}}
+  {{- $pageKey = "ARTICLE" -}}
+{{- else -}}
+  {{- with .File -}}
+    {{- if eq .BaseFileName "about" -}}
+      {{- $pageKey = "ABOUT" -}}
+    {{- else if eq .BaseFileName "friend" -}}
+      {{- $pageKey = "FRIEND" -}}
+    {{- end -}}
+  {{- end -}}
+{{- end -}}
+
+{{- $posts := where .Site.RegularPages "Section" "in" $params.mainSections -}}
+{{- $activePath := partial "helpers/showcase-active-path.html" (dict "ctx" .) -}}
+{{- $socialLinks := slice -}}
+{{- if and (isset $showcase "social") (isset $showcase.social "links") -}}
+  {{- $socialLinks = $showcase.social.links -}}
+{{- else if $params.social -}}
+  {{- range $name, $url := $params.social -}}
+    {{- $socialLinks = $socialLinks | append (dict "name" $name "url" $url) -}}
+  {{- end -}}
+{{- end -}}
+
+<div class="home-sidebar-card showcase-surface">
+  <div class="sidebar-card-header">
+    <span class="profile-kicker">{{ $pageKey }}</span>
+    <div class="sidebar-card-avatar">
+      {{- if $avatar -}}
+        <img
+          data-src="{{ $avatar | relURL }}"
+          src="{{ $avatar | relURL }}"
+          alt="{{ $params.author | default .Site.Title }}"
+          class="lazyload avatar-image"
+        />
+      {{- else -}}
+        <div class="avatar-placeholder">{{ $params.author | default .Site.Title }}</div>
+      {{- end -}}
+    </div>
+
+    <div class="sidebar-card-info">
+      <h2 class="author-name">{{ $params.author | default .Site.Title }}</h2>
+      {{- with $subtitle -}}
+        <p class="author-subtitle">{{ . }}</p>
+      {{- end -}}
+      {{- with $params.description -}}
+        <p class="author-description">{{ . }}</p>
+      {{- end -}}
+    </div>
+  </div>
+
+  <div class="sidebar-card-stats">
+    <a class="stat-item" href="{{ "/" | relLangURL }}">
+      <span class="stat-label">文章</span>
+      <span class="stat-number">{{ len $posts }}</span>
+    </a>
+    <a class="stat-item" href="{{ "categories/" | relLangURL }}">
+      <span class="stat-label">分类</span>
+      <span class="stat-number">{{ len .Site.Taxonomies.categories }}</span>
+    </a>
+    <a class="stat-item" href="{{ "tags/" | relLangURL }}">
+      <span class="stat-label">标签</span>
+      <span class="stat-number">{{ len .Site.Taxonomies.tags }}</span>
+    </a>
+  </div>
+
+  {{- $socialEnabled := true -}}
+  {{- if and (isset $showcase "social") (isset $showcase.social "enable") -}}
+    {{- $socialEnabled = $showcase.social.enable -}}
+  {{- end -}}
+  {{- if and $socialEnabled (gt (len $socialLinks) 0) -}}
+    <div class="sidebar-card-social">
+      {{- range $socialLinks -}}
+        {{- $name := .name | default "Link" -}}
+        {{- $label := .label | default "" -}}
+        {{- if not $label -}}
+          {{- $lower := lower $name -}}
+          {{- if in $lower "github" -}}
+            {{- $label = "GH" -}}
+          {{- else if in $lower "bilibili" -}}
+            {{- $label = "B" -}}
+          {{- else if or (in $lower "mail") (in $lower "email") -}}
+            {{- $label = "@" -}}
+          {{- else if ge (len $name) 2 -}}
+            {{- $label = slicestr (upper $name) 0 2 -}}
+          {{- else -}}
+            {{- $label = upper $name -}}
+          {{- end -}}
+        {{- end -}}
+        <a
+          class="social-link"
+          href="{{ .url }}"
+          target="_blank"
+          rel="noopener nofollow noreferrer"
+          title="{{ $name }}"
+          aria-label="{{ $name }}"
+        >
+          <span class="social-link-label">{{ $label }}</span>
+          <span class="screen-reader-text">{{ $name }}</span>
+        </a>
+      {{- end -}}
+    </div>
+  {{- end -}}
+
+  {{- if $params.menu -}}
+    <nav class="sidebar-card-menu" aria-label="Page navigation">
+      {{- range $params.menu -}}
+        {{- $menuURL := .url | relLangURL -}}
+        {{- $menuPath := $menuURL | strings.TrimSuffix "/" -}}
+        {{- $isActive := eq $activePath $menuPath -}}
+        {{- if and (eq $activePath "") (eq $menuPath "") -}}
+          {{- $isActive = true -}}
+        {{- end -}}
+        <a
+          class="menu-button{{ if $isActive }} is-active{{ end }}"
+          href="{{ $menuURL }}"
+          title="{{ .name }}"
+          aria-label="{{ .name }}"
+          {{ if $isActive }}aria-current="page"{{ end }}
+        >
+          {{- if ne .icon false -}}
+            <span class="menu-icon icon {{ if or (and (eq .icon "e62b") ($params.icon_font)) (and (eq .icon "f6ad") (not $params.icon_font)) (not .icon) }}rotate{{ end }}">
+              {{- if .icon -}}
+                {{- if and (strings.Contains .icon ".") (strings.Contains .icon "/") -}}
+                  <img src="{{ .icon | relURL }}" alt="{{ .name }} icon" style="height: 1em;">
+                {{- else -}}
+                  &#x{{- .icon -}};
+                {{- end -}}
+              {{- else if $params.icon_font -}}
+                &#xe62b;
+              {{- else -}}
+                &#xf6ad;
+              {{- end -}}
+            </span>
+          {{- end -}}
+          <span class="menu-text">{{ .name }}</span>
+        </a>
+      {{- end -}}
+    </nav>
+  {{- end -}}
+</div>

@@ -1,0 +1,122 @@
+{{- $ctx := . -}}
+{{- $homeCfg := .Site.Params.showcase.home -}}
+{{- $categories := .Site.Taxonomies.categories -}}
+{{- $topicLimit := $homeCfg.topic_limit | default 3 -}}
+{{- $configuredTopics := slice -}}
+{{- if and (isset $homeCfg "topics") (gt (len $homeCfg.topics) 0) -}}
+  {{- $configuredTopics = $homeCfg.topics -}}
+{{- else if and (isset .Site.Params "home_categories") (isset .Site.Params.home_categories "content") -}}
+  {{- $configuredTopics = .Site.Params.home_categories.content -}}
+{{- end -}}
+{{- $fallbackCover := partial "helpers/showcase-cover-image.html" (dict "ctx" $ctx "kind" "home") -}}
+
+<div class="home-category-cards">
+  {{- if gt (len $configuredTopics) 0 -}}
+    {{- range first $topicLimit $configuredTopics -}}
+      {{- $topicTitle := .title | default "" -}}
+      {{- $topicDesc := .description | default "" -}}
+      {{- $topicTag := .tag | default "专题" -}}
+      {{- $topicLink := .url | default "" -}}
+      {{- $topicCover := .cover | default $fallbackCover -}}
+      {{- $categoryNames := slice -}}
+      {{- with .category -}}
+        {{- $categoryNames = $categoryNames | append . -}}
+      {{- end -}}
+      {{- with .categories -}}
+        {{- if reflect.IsSlice . -}}
+          {{- $categoryNames = . -}}
+        {{- else -}}
+          {{- $categoryNames = $categoryNames | append . -}}
+        {{- end -}}
+      {{- end -}}
+      {{- $primaryCategory := "" -}}
+      {{- if gt (len $categoryNames) 0 -}}
+        {{- $primaryCategory = index $categoryNames 0 -}}
+      {{- end -}}
+      {{- if and (not $topicTitle) $primaryCategory -}}
+        {{- $topicTitle = $primaryCategory -}}
+      {{- end -}}
+      {{- if and (not $topicLink) $primaryCategory -}}
+        {{- $topicLink = printf "categories/%s/" (urlize $primaryCategory) | relLangURL -}}
+      {{- end -}}
+      {{- $count := 0 -}}
+      {{- if $primaryCategory -}}
+        {{- with index $categories (urlize $primaryCategory) -}}
+          {{- $count = len . -}}
+        {{- end -}}
+      {{- end -}}
+      {{- if not $topicDesc -}}
+        {{- if gt $count 0 -}}
+          {{- $topicDesc = printf "当前共收录 %d 篇相关文章，后续会随着文章增加自动扩展。" $count -}}
+        {{- else -}}
+          {{- $topicDesc = "当前还没有对应文章，补充公开内容后这里会自动变得更完整。" -}}
+        {{- end -}}
+      {{- end -}}
+
+      {{- if $topicLink -}}
+        <a class="category-card-link" href="{{ $topicLink }}" title="{{ $topicTitle }}" aria-label="{{ $topicTitle }}">
+          <article class="category-card">
+            <div class="category-card-image">
+              {{- if $topicCover -}}
+                <img data-src="{{ $topicCover | relURL }}" src="{{ $topicCover | relURL }}" class="lazyload" alt="{{ $topicTitle }}" />
+              {{- else -}}
+                <div class="category-card-fallback">{{ $topicTitle }}</div>
+              {{- end -}}
+              <div class="category-card-overlay"></div>
+            </div>
+            <div class="category-card-content">
+              <span class="category-card-chip">{{ $topicTag }}</span>
+              <h3 class="category-card-title">{{ $topicTitle }}</h3>
+              <p class="category-card-count">{{ $topicDesc }}</p>
+            </div>
+          </article>
+        </a>
+      {{- else -}}
+        <article class="category-card">
+          <div class="category-card-image">
+            {{- if $topicCover -}}
+              <img data-src="{{ $topicCover | relURL }}" src="{{ $topicCover | relURL }}" class="lazyload" alt="{{ $topicTitle }}" />
+            {{- else -}}
+              <div class="category-card-fallback">{{ $topicTitle }}</div>
+            {{- end -}}
+            <div class="category-card-overlay"></div>
+          </div>
+          <div class="category-card-content">
+            <span class="category-card-chip">{{ $topicTag }}</span>
+            <h3 class="category-card-title">{{ $topicTitle }}</h3>
+            <p class="category-card-count">{{ $topicDesc }}</p>
+          </div>
+        </article>
+      {{- end -}}
+    {{- end -}}
+  {{- else if gt (len $categories) 0 -}}
+    {{- range first $topicLimit $categories.ByCount -}}
+      {{- $topicCover := .Page.Params.cover | default $fallbackCover -}}
+      <a class="category-card-link" href="{{ .Page.RelPermalink }}" title="{{ .Page.Title }}" aria-label="{{ .Page.Title }}">
+        <article class="category-card">
+          <div class="category-card-image">
+            {{- if $topicCover -}}
+              <img data-src="{{ $topicCover | relURL }}" src="{{ $topicCover | relURL }}" class="lazyload" alt="{{ .Page.Title }}" />
+            {{- else -}}
+              <div class="category-card-fallback">{{ .Page.Title }}</div>
+            {{- end -}}
+            <div class="category-card-overlay"></div>
+          </div>
+          <div class="category-card-content">
+            <span class="category-card-chip">分类</span>
+            <h3 class="category-card-title">{{ .Page.Title }}</h3>
+            <p class="category-card-count">当前共收录 {{ .Count }} 篇相关文章。</p>
+          </div>
+        </article>
+      </a>
+    {{- end -}}
+  {{- else -}}
+    <div class="topic-empty-card">
+      <div class="topic-empty-card__inner">
+        <span class="category-card-chip">专题</span>
+        <h3 class="category-card-title">主题卡片会在这里出现</h3>
+        <p class="category-card-count">可以通过 hugo.toml 中的 showcase.home.topics 配置专题卡片，也可以直接依赖现有分类数据自动生成。</p>
+      </div>
+    </div>
+  {{- end -}}
+</div>

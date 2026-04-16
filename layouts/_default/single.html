@@ -1,0 +1,16 @@
+{{- define "main" -}}
+  {{- $pageFileBase := "" -}}
+  {{- with .File -}}
+    {{- $pageFileBase = .BaseFileName -}}
+  {{- end -}}
+
+  {{- if eq $pageFileBase "about" -}}
+    {{- partial "showcase/layout.html" (dict "ctx" . "inner" "showcase/about-content.html" "pageClass" "showcase-about") -}}
+  {{- else if eq $pageFileBase "friend" -}}
+    {{- partial "showcase/layout.html" (dict "ctx" . "inner" "showcase/friend-content.html" "pageClass" "showcase-friend") -}}
+  {{- else if in .Site.Params.mainSections .Type -}}
+    {{- partial "showcase/layout.html" (dict "ctx" . "inner" "showcase/post-content.html" "pageClass" "showcase-post") -}}
+  {{- else -}}
+    {{- partial "article.html" . -}}
+  {{- end -}}
+{{- end -}}

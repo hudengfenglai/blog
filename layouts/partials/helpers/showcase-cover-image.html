@@ -1,0 +1,42 @@
+{{- $ctx := .ctx | default . -}}
+{{- $kind := .kind | default "" -}}
+{{- $cover := "" -}}
+
+{{- with $ctx.Params.cover -}}
+  {{- if not (strings.HasPrefix . "rgb") -}}
+    {{- $cover = . -}}
+  {{- end -}}
+{{- end -}}
+
+{{- if not $cover -}}
+  {{- with $ctx.Params.banner -}}
+    {{- if not (strings.HasPrefix . "rgb") -}}
+      {{- $cover = . -}}
+    {{- end -}}
+  {{- end -}}
+{{- end -}}
+
+{{- if not $cover -}}
+  {{- $cover = partial "helpers/showcase-banner.html" (dict "ctx" $ctx "kind" $kind) -}}
+  {{- if and $cover (strings.HasPrefix $cover "rgb") -}}
+    {{- $cover = "" -}}
+  {{- end -}}
+{{- end -}}
+
+{{- if not $cover -}}
+  {{- $cover = partial "helpers/randomCover.html" $ctx -}}
+{{- end -}}
+
+{{- if and $cover (strings.HasPrefix $cover "rgb") -}}
+  {{- $cover = "" -}}
+{{- end -}}
+
+{{- if not $cover -}}
+  {{- with $ctx.Site.Params.banner -}}
+    {{- if not (strings.HasPrefix . "rgb") -}}
+      {{- $cover = . -}}
+    {{- end -}}
+  {{- end -}}
+{{- end -}}
+
+{{- return $cover -}}

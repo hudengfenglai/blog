@@ -1,0 +1,77 @@
+{{- $pages := where .Site.RegularPages "Section" "in" .Site.Params.mainSections -}}
+{{- $sortConfig := .Site.Params.sort_order.home | default "date-reverse" -}}
+{{- if eq $sortConfig "weight" -}}
+  {{- $pages = $pages.ByWeight -}}
+{{- else if eq $sortConfig "weight-reverse" -}}
+  {{- $pages = $pages.ByWeight.Reverse -}}
+{{- else if eq $sortConfig "date" -}}
+  {{- $pages = $pages.ByDate -}}
+{{- else -}}
+  {{- $pages = $pages.ByDate.Reverse -}}
+{{- end -}}
+
+{{- $pageSize := 0 -}}
+{{- with .Site.Params.paginate.post -}}
+  {{- $pageSize = . -}}
+{{- end -}}
+{{- $paginator := "" -}}
+{{- if gt $pageSize 0 -}}
+  {{- $paginator = .Paginate $pages $pageSize -}}
+{{- else -}}
+  {{- $paginator = .Paginate $pages -}}
+{{- end -}}
+
+{{- $showTopics := true -}}
+{{- if and (isset .Site.Params.showcase "modules") (isset .Site.Params.showcase.modules "home_topics") -}}
+  {{- $showTopics = .Site.Params.showcase.modules.home_topics -}}
+{{- else if and (isset .Site.Params "home_categories") (isset .Site.Params.home_categories "enable") -}}
+  {{- $showTopics = .Site.Params.home_categories.enable -}}
+{{- end -}}
+{{- $showPosts := true -}}
+{{- if and (isset .Site.Params.showcase "modules") (isset .Site.Params.showcase.modules "home_posts") -}}
+  {{- $showPosts = .Site.Params.showcase.modules.home_posts -}}
+{{- end -}}
+
+{{- $homeCfg := .Site.Params.showcase.home -}}
+
+{{- if $showTopics -}}
+  <div class="showcase-card section-card">
+    <div class="section-heading">
+      <div>
+        <p class="section-kicker">Featured Topics</p>
+        <h2 class="section-title">{{ $homeCfg.topics_title | default "主题专区" }}</h2>
+      </div>
+      <p class="section-description">{{ $homeCfg.topics_description | default "优先展示配置的专题卡片，没有配置时会自动回退到现有分类。" }}</p>
+    </div>
+    {{- partial "home-category-cards.html" . -}}
+  </div>
+{{- end -}}
+
+{{- if $showPosts -}}
+  <div class="showcase-card section-card">
+    <div class="section-heading">
+      <div>
+        <p class="section-kicker">Latest Posts</p>
+        <h2 class="section-title">{{ $homeCfg.posts_title | default "最新文章" }}</h2>
+      </div>
+      <p class="section-description">{{ $homeCfg.posts_description | default "文章卡片流直接读取真实 Hugo 文章数据，并保持对封面、分类、标签与摘要的自动适配。" }}</p>
+    </div>
+
+    {{- if gt (len $paginator.Pages) 0 -}}
+      <div class="home-articles-list">
+        {{- range $index, $page := $paginator.Pages -}}
+          {{- partial "home-article-card.html" (dict "ctx" . "page" $page "index" $index) -}}
+        {{- end -}}
+      </div>
+    {{- else -}}
+      <div class="page-empty-state">
+        <h3>{{ $homeCfg.empty_posts_title | default "暂时还没有公开文章" }}</h3>
+        <p>{{ $homeCfg.empty_posts_description | default "继续在 content/post/ 下补充内容后，这里会自动渲染完整的文章卡片流。" }}</p>
+      </div>
+    {{- end -}}
+  </div>
+{{- end -}}
+
+{{- if gt $paginator.TotalPages 1 -}}
+  {{- partial "pagination.html" . -}}
+{{- end -}}
