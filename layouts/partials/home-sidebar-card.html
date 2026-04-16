@@ -74,7 +74,7 @@
   </div>
 
   <div class="sidebar-card-stats">
-    <a class="stat-item" href="{{ "/" | relLangURL }}">
+    <a class="stat-item" href="{{ .Site.Home.Permalink | relURL }}">
       <span class="stat-label">文章</span>
       <span class="stat-number">{{ len $posts }}</span>
     </a>
@@ -129,12 +129,9 @@
   {{- if $params.menu -}}
     <nav class="sidebar-card-menu" aria-label="Page navigation">
       {{- range $params.menu -}}
-        {{- $menuURL := .url | relLangURL -}}
+        {{- $menuURL := partial "helpers/menu-url.html" (dict "ctx" $ "url" .url) -}}
         {{- $menuPath := $menuURL | strings.TrimSuffix "/" -}}
         {{- $isActive := eq $activePath $menuPath -}}
-        {{- if and (eq $activePath "") (eq $menuPath "") -}}
-          {{- $isActive = true -}}
-        {{- end -}}
         <a
           class="menu-button{{ if $isActive }} is-active{{ end }}"
           href="{{ $menuURL }}"

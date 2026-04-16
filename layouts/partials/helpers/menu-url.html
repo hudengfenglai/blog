@@ -1,0 +1,32 @@
+{{- $ctx := .ctx -}}
+{{- $rawURL := .url | default "" -}}
+{{- $result := "" -}}
+
+{{- if or (strings.HasPrefix $rawURL "http://") (strings.HasPrefix $rawURL "https://") (strings.HasPrefix $rawURL "//") -}}
+  {{- $result = $rawURL -}}
+{{- else -}}
+  {{- $normalized := $rawURL | strings.TrimPrefix "/" -}}
+  {{- $key := $normalized | strings.TrimSuffix "/" -}}
+
+  {{- if eq $key "" -}}
+    {{- $result = $ctx.Site.Home.Permalink | relURL -}}
+  {{- else if eq $key "about" -}}
+    {{- with $ctx.Site.GetPage "/about" -}}
+      {{- $result = .Permalink | relURL -}}
+    {{- end -}}
+  {{- else if eq $key "archives" -}}
+    {{- with $ctx.Site.GetPage "/archives" -}}
+      {{- $result = .Permalink | relURL -}}
+    {{- end -}}
+  {{- else if eq $key "friend" -}}
+    {{- with $ctx.Site.GetPage "/friend" -}}
+      {{- $result = .Permalink | relURL -}}
+    {{- end -}}
+  {{- end -}}
+
+  {{- if not $result -}}
+    {{- $result = (printf "%s/" $key) | relLangURL -}}
+  {{- end -}}
+{{- end -}}
+
+{{- return $result -}}

@@ -48,10 +48,11 @@
 {{- if or $showMenu $mobile -}}
 <div class="sidebar-menu">
   {{- range $params.menu -}}
+    {{- $menuURL := partial "helpers/menu-url.html" (dict "ctx" $.ctx "url" .url) -}}
     <div class="sidebar-menu-link-wrap">
       <a
         class="sidebar-menu-link-dummy"
-        href="{{ .url | relLangURL }}"
+        href="{{ $menuURL }}"
         aria-label="{{ i18n .name }}"
       ></a>
       {{- if ne .icon false -}}
