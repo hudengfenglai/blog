@@ -36,13 +36,18 @@
       {{- if and (not $topicTitle) $primaryCategory -}}
         {{- $topicTitle = $primaryCategory -}}
       {{- end -}}
-      {{- if and (not $topicLink) $primaryCategory -}}
-        {{- $topicLink = printf "categories/%s/" (urlize $primaryCategory) | relLangURL -}}
-      {{- end -}}
       {{- $count := 0 -}}
       {{- if $primaryCategory -}}
         {{- with index $categories (urlize $primaryCategory) -}}
           {{- $count = len . -}}
+          {{- if not $topicLink -}}
+            {{- $topicLink = .Page.RelPermalink -}}
+          {{- end -}}
+        {{- end -}}
+        {{- if not $topicLink -}}
+          {{- with $ctx.Site.GetPage "/categories" -}}
+            {{- $topicLink = .RelPermalink -}}
+          {{- end -}}
         {{- end -}}
       {{- end -}}
       {{- if not $topicDesc -}}

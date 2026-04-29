@@ -1,191 +1,156 @@
-# 等风来 - 个人博客
+# 等风来
 
-> 静待风起 | 疾风知劲草
+一个基于 Hugo 搭建的个人博客，当前使用 `hugo-theme-reimu`，并已经适配 GitHub Pages 项目站部署。
 
-[![Hugo](https://img.shields.io/badge/Hugo-Latest-blue.svg)](https://gohugo.io)
-[![License](https://img.shields.io/badge/License-MIT-green.svg)]()
+线上地址：
 
-这是一个基于 Hugo 的个人博客项目，采用简洁优雅的设计风格。
+- `https://hudengfenglai.github.io/blog/`
 
-## 📋 项目概述
+## 技术栈
 
-- **博客名称**：等风来
-- **主题**：hugo-theme-reimu
-- **语言**：简体中文
-- **作者**：等风来
-- **座右铭**：少女祈祷中... | 静待风起 | 疾风知劲草
+- Hugo Extended
+- 主题：`hugo-theme-reimu`
+- 部署：GitHub Pages + GitHub Actions
 
-## 🚀 快速开始
+## 本地开发
 
-### 前置要求
+启动本地预览：
 
-- **Hugo** (Extended版本推荐)
-  - 安装地址：https://gohugo.io/installation/
-
-### 安装步骤
-
-1. **克隆或下载项目**
-```bash
-cd e:\blog_hugo\blog
-```
-
-2. **启动本地开发服务器**
 ```bash
 hugo server
 ```
-然后在浏览器中访问 `http://localhost:1313`
 
-### 编译生成静态网站
+如果需要和线上构建保持一致，可以使用：
 
 ```bash
-hugo
+hugo --gc --minify --cacheDir .hugo_cache
 ```
 
-生成的静态文件将输出到 `public/` 目录，可直接用于部署。
+构建产物会输出到：
 
-## 📁 项目结构
+- `public/`
 
+## 文章写在哪里
+
+日常博客文章写在：
+
+- `content/post/`
+
+例如：
+
+- `content/post/my-first-post.md`
+- `content/post/hugo-notes.md`
+
+也可以直接让 Hugo 帮你创建：
+
+```bash
+hugo new post/my-first-post.md
 ```
+
+创建后把文档里的 `draft` 改成 `false`，文章才会在首页、归档和文章页中显示。
+
+推荐 front matter 示例：
+
+```yaml
+---
+title: "我的第一篇文章"
+date: 2026-04-16T20:00:00+08:00
+draft: false
+description: "一句简短摘要"
+categories:
+  - 学习笔记
+tags:
+  - Hugo
+  - 博客
+cover: "images/banner.webp"
+---
+```
+
+正文就直接写在 front matter 下面，使用 Markdown 即可。
+
+如果某篇文章需要单独管理图片，推荐使用 page bundle：
+
+```text
+content/post/my-post/
+├─ index.md
+├─ cover.png
+└─ image-1.png
+```
+
+这样文章内图片可以和正文放在同一个目录里，后期整理更方便。
+
+## 其他页面写在哪里
+
+- 关于页：`content/about.md`
+- 友链页：`content/friend.md`
+- 归档页入口：`content/archives/_index.md`
+
+友链数据在：
+
+- `data/friends.yml`
+
+## 站点结构
+
+```text
 blog/
-├── archetypes/          # 文章模板
-├── assets/              # 静态资源
-├── content/             # 博客内容
-│   ├── about.md         # 关于页面
-│   ├── friend.md        # 友链页面
-│   ├── archives/        # 档案/归档
-│   └── post/            # 博客文章
-├── data/                # 数据文件
-│   ├── covers.yml       # 封面配置
-│   ├── friends.yml      # 友链列表
-│   └── vendor.yml       # 供应商信息
-├── i18n/                # 国际化配置
-├── layouts/             # 页面布局和模板
-│   ├── 404.html         # 404 页面
-│   ├── index.html       # 首页
-│   ├── _default/        # 默认模板
-│   ├── archives/        # 归档页面模板
-│   ├── partials/        # 页面组件
-│   └── shortcodes/      # 自定义短代码
-├── static/              # 静态文件
-│   ├── avatar/          # 头像
-│   └── images/          # 图片资源
-├── themes/              # 主题目录
-│   └── hugo-theme-reimu/# 使用的主题
-├── public/              # 生成的网站（部署用）
-├── resources/           # 构建缓存
-├── hugo.toml            # 项目配置文件
-└── README.md            # 本文件
+├─ content/                  # 站点内容
+│  ├─ about.md               # 关于页
+│  ├─ friend.md              # 友链页
+│  ├─ archives/_index.md     # 归档页
+│  └─ post/                  # 博客文章
+├─ data/                     # 站点数据
+│  ├─ covers.yml
+│  └─ friends.yml
+├─ layouts/                  # Hugo 模板
+├─ static/                   # 静态资源
+│  ├─ avatar/
+│  └─ images/
+├─ themes/hugo-theme-reimu/  # 主题
+├─ hugo.toml                 # 全站配置
+└─ .github/workflows/        # GitHub Actions 部署配置
 ```
 
-## ⚙️ 主要配置
+## 常用修改位置
 
-### hugo.toml 配置说明
+站点基础配置：
 
-```toml
-baseURL = 'https://example.org/'      # 网站网址
-languageCode = 'zh-CN'                # 语言
-defaultContentLanguage = 'zh-CN'      # 默认语言
-title = '等风来'                       # 网站标题
-theme = "hugo-theme-reimu"            # 使用主题
+- `hugo.toml`
 
-# 作者信息
-[params]
-  author = "等风来"
-  subtitle = "少女祈祷中..."
-  avatar = "avatar.jpg"               # 头像
-  description = "静待风起 | 疾风知劲草"
-  banner = "images/banner.webp"       # 首页横幅
-```
+首页专题卡、banner、社交链接等配置：
 
-## 📝 常见操作
+- `hugo.toml` 中的 `params.showcase.*`
 
-### 创建新文章
+分类专题封面图：
+
+- `static/images/categories/`
+
+头像：
+
+- `static/avatar/avatar.jpg`
+
+## 发布流程
+
+推送到 `main` 后，GitHub Actions 会自动构建并发布到 GitHub Pages。
+
+常用流程：
 
 ```bash
-hugo new post/文章标题.md
+git add .
+git commit -m "write new post"
+git push origin main
 ```
 
-### 发布文章
+部署日志查看位置：
 
-编辑文章时，在 Front Matter 中设置：
-```markdown
----
-title: 文章标题
-description: 文章描述
-date: 2024-01-01T12:00:00+08:00
-draft: false  # 改为 false 发布
----
-```
+- GitHub 仓库 `Actions`
 
-### 修改配置
+## 当前约定
 
-所有网站配置都在 `hugo.toml` 中。修改后，开发服务器会自动重新加载。
+- 项目站部署路径是 `/blog/`
+- `baseURL` 已配置为 `https://hudengfenglai.github.io/blog/`
+- 首页文章流读取 `content/post/` 下的公开文章
+- 归档页也基于 `content/post/` 自动生成
 
-### 修改主题
+## 一句话说明
 
-主题文件位于 `themes/hugo-theme-reimu/`
-
-## 🎨 主要功能
-
-- ✅ 响应式设计，支持移动端
-- ✅ 左侧侧边栏导航
-- ✅ 文章分类和标签系统
-- ✅ 友链功能
-- ✅ 归档页面
-- ✅ 暗黑模式支持（主题支持）
-- ✅ SEO 优化
-
-## 📦 部署
-
-### 静态托管（GitHub Pages, Netlify 等）
-
-1. 运行 `hugo` 生成静态文件
-2. 将 `public/` 目录内容上传到托管平台
-3. 部署完成
-
-### 修改 baseURL
-
-部署前，在 `hugo.toml` 中修改 `baseURL` 为实际网址：
-
-```toml
-baseURL = 'https://yourdomain.com/'
-```
-
-## 🛠️ 开发工作流
-
-```bash
-# 1. 启动本地服务器
-hugo server
-
-# 2. 编辑内容
-# 编写或修改 content/ 中的文章
-
-# 3. 实时预览
-# 浏览器自动刷新，查看效果
-
-# 4. 准备发布
-# 确认所有文章 draft: false
-
-# 5. 生成并部署
-hugo
-# 上传 public/ 到服务器
-```
-
-## 📚 更多信息
-
-- [Hugo 官方文档](https://gohugo.io/documentation/)
-- [Hugo Themes](https://themes.gohugo.io/)
-- [hugo-theme-reimu 主题](https://github.com/D-Sketon/hugo-theme-reimu)
-
-## 📄 许可证
-
-MIT License
-
-## 🙋 联系方式
-
-- 博客地址：[等风来](https://example.org/)（修改 baseURL 后）
-- 作者：等风来
-
----
-
-**祝你写博客愉快！** ✨
+如果你只是想开始写博客，那么直接去 `content/post/` 新建 Markdown 文件就可以了。
