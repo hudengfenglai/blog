@@ -1468,9 +1468,11 @@ body {
 .post-toc-card {
   margin: 0 0 24px;
   border-radius: 24px;
-  background: rgba(255, 250, 251, 0.92);
-  border: 1px solid rgba(255, 223, 230, 0.8);
-  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.64);
+  background: rgba(255, 253, 254, 0.98);
+  border: 1px solid rgba(255, 205, 218, 0.92);
+  box-shadow:
+    0 14px 30px rgba(232, 91, 116, 0.08),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.72);
   overflow: hidden;
 }
 
@@ -1478,9 +1480,10 @@ body {
   cursor: pointer;
   list-style: none;
   padding: 18px 22px;
-  color: var(--showcase-title);
+  color: #2d3548;
   font-size: 1rem;
   font-weight: 800;
+  border-bottom: 1px solid rgba(255, 219, 227, 0.72);
 }
 
 .post-toc-summary::-webkit-details-marker {
@@ -1500,11 +1503,11 @@ body {
 }
 
 .post-toc-content {
-  padding: 0 22px 18px;
+  padding: 14px 22px 20px;
 }
 
 .post-toc-content #TableOfContents {
-  color: #657081;
+  color: #3b475f;
 }
 
 .post-toc-content ol,
@@ -1519,12 +1522,21 @@ body {
 }
 
 .post-toc-content a {
-  color: inherit;
+  display: inline-block;
+  color: #3b475f;
+  font-weight: 650;
   text-decoration: none;
+  transition: color 0.18s ease, transform 0.18s ease;
+}
+
+.post-toc-content ul ul a {
+  color: #59667d;
+  font-weight: 600;
 }
 
 .post-toc-content a:hover {
   color: var(--showcase-accent-strong);
+  transform: translateX(2px);
 }
 
 .post-prose {
