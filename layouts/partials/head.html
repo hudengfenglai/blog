@@ -103,7 +103,9 @@
 {{- printf `
 <link rel=%q type=%q href=%q title=%q>` .Rel .MediaType.Type .Permalink site.Title | safeHTML -}}
 {{- end -}}
-<link rel="shortcut icon" href="{{ "favicon.ico" | relURL }}">
+<link rel="icon" type="image/png" sizes="32x32" href="{{ "favicon-32x32.png?v=2" | relURL }}">
+<link rel="apple-touch-icon" sizes="180x180" href="{{ "apple-touch-icon.png?v=2" | relURL }}">
+<link rel="shortcut icon" href="{{ "favicon.ico?v=2" | relURL }}">
 {{- partial "helpers/scss.html" (dict "source" "css/main.scss" "temp" "main.scss" "target" "css/main.css" "ctx" .) -}}
 {{- partial "helpers/cdnCss.html" (dict "name" "photoswipe" "ctx" . "async" true) -}}
 {{- partial "helpers/cdnCss.html" (dict "name" "katex" "ctx" . "async" true) -}}
