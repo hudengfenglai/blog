@@ -86,27 +86,27 @@ show_update_time = true
   post_related = true
 
 [params.showcase.home]
-  subtitle = "静待风起，疾风知劲草"
-  intro = "记录学习笔记，分享技术与生活。"
+  subtitle = "静待风起，疾风知劲草 🌬️"
+  intro = "记录学习笔记，分享技术与生活。这里有技术教程、读书心得和生活感悟。"
   topic_limit = 3
-  topics_title = "主题专区"
+  topics_title = "📚 主题专区"
   topics_description = "精选分类内容，持续更新中。"
-  posts_title = "最新文章"
+  posts_title = "✨ 最新文章"
   posts_description = "记录思考与成长。"
   empty_posts_title = "暂时还没有公开文章"
   empty_posts_description = "继续在 content/post/ 下补充内容后，首页文章流和归档时间线会自动完整呈现。"
 
   [[params.showcase.home.topics]]
-    title = "读书笔记"
+    title = "📖 读书笔记"
     category = "学习笔记"
-    description = "收纳阅读札记、摘抄与书单整理。"
+    description = "收纳阅读札记、摘抄与书单整理，记录成长的每一步。"
     cover = "images/categories/reading-notes.svg"
     tag = "Focus"
 
   [[params.showcase.home.topics]]
-    title = "分享"
+    title = "🔧 技术分享"
     category = "分享"
-    description = "放置项目记录、折腾过程和杂项想法。"
+    description = "放置项目记录、折腾过程和杂项想法，分享让知识传递。"
     cover = "images/categories/share.svg"
     tag = "Notes"
 
