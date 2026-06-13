@@ -3,6 +3,7 @@ title: 第一篇文章：欢迎来到我的博客
 date: 2024-01-01T10:00:00+08:00
 lastmod: 2024-01-01T10:00:00+08:00
 draft: false
+weight: 100
 description: 这是博客的第一篇文章，介绍博客的基本功能和使用方法。
 categories:
   - 分享

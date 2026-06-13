@@ -53,6 +53,14 @@ footer:
   busuanzi: true
 
 ########################################
+# Social Links
+########################################
+social:
+  github: https://github.com/hudengfenglai
+  bilibili: https://space.bilibili.com/
+  email: mailto:hello@example.com
+
+########################################
 # Search - Algolia
 ########################################
 algolia_search:
