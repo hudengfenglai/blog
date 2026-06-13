@@ -12,7 +12,7 @@ theme = "hugo-theme-reimu"
 [params]
   author = "等风来"
   subtitle = "少女祈祷中..."
-  avatar = "avatar.jpg"
+  avatar = "avatar/avatar.jpg"
   description = "静待风起 | 疾风知劲草"
   banner = "images/banner.webp"
 
@@ -36,11 +36,11 @@ theme = "hugo-theme-reimu"
 
   [[params.home_categories.content]]
     categories = "学习笔记"
-    cover = "images/categories/reading-notes.png"
+    cover = "images/categories/reading-notes.svg"
 
   [[params.home_categories.content]]
     categories = "分享"
-    cover = "images/categories/share.png"
+    cover = "images/categories/share.svg"
 
 mainSections = ["post"]
 dateFormat = "2006-01-02"
@@ -86,13 +86,13 @@ show_update_time = true
   post_related = true
 
 [params.showcase.home]
-  subtitle = "少女祈祷中..."
-  intro = "让首页的专题卡片、文章流与空状态都统一由配置驱动。"
+  subtitle = "静待风起，疾风知劲草"
+  intro = "记录学习笔记，分享技术与生活。"
   topic_limit = 3
   topics_title = "主题专区"
-  topics_description = "优先从配置中读取专题卡片，没有配置时再回退到现有分类数据。"
+  topics_description = "精选分类内容，持续更新中。"
   posts_title = "最新文章"
-  posts_description = "当有公开文章后，首页会自动按照现有 Hugo 数据生成文章卡片流。"
+  posts_description = "记录思考与成长。"
   empty_posts_title = "暂时还没有公开文章"
   empty_posts_description = "继续在 content/post/ 下补充内容后，首页文章流和归档时间线会自动完整呈现。"
 
@@ -100,14 +100,14 @@ show_update_time = true
     title = "读书笔记"
     category = "学习笔记"
     description = "收纳阅读札记、摘抄与书单整理。"
-    cover = "images/categories/reading-notes.png"
+    cover = "images/categories/reading-notes.svg"
     tag = "Focus"
 
   [[params.showcase.home.topics]]
     title = "分享"
     category = "分享"
     description = "放置项目记录、折腾过程和杂项想法。"
-    cover = "images/categories/share.png"
+    cover = "images/categories/share.svg"
     tag = "Notes"
 
 [params.showcase.archive]
@@ -160,3 +160,16 @@ show_update_time = true
 [caches]
   [caches.images]
     dir = ":cacheDir/images"
+
+[sitemap]
+  hostname = "https://hudengfenglai.github.io/blog/"
+  changefreq = "weekly"
+
+[outputs]
+  home = ["Algolia", "HTML", "RSS"]
+
+[outputFormats.Algolia]
+  baseName = "algolia"
+  isPlainText = true
+  mediaType = "application/json"
+  notAlternative = true

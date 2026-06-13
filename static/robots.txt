@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://hudengfenglai.github.io/blog/sitemap.xml

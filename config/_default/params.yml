@@ -1,0 +1,190 @@
+########################################
+# Comment system - Waline
+########################################
+comment:
+  title:
+    zh-CN: 说些什么吧！
+  default: waline
+
+waline:
+  enable: true
+  serverURL: ""  # ⚠️ 请填写你的 Waline 服务地址，如 https://你的域名.vercel.app
+  locale:
+    zh-CN:
+      nick: 昵称
+      nickError: "昵称不能为空"
+      mail: 邮箱
+      mailError: "请填写正确的邮箱地址"
+      link: 网站
+      placeholder: "想说点什么..."
+      submit: 提交
+      replies: "回复"
+      reply: 回复
+      cancel: 取消
+      confirm: 确认
+      loading: 加载中...
+      noComment: 还没有评论哦，快来抢沙发吧！
+      error: 加载失败，请重试！
+  emoji:
+    - https://unpkg.com/@waline/emojis@1.2.0/weibo
+    - https://unpkg.com/@waline/emojis@1.2.0/alus
+    - https://unpkg.com/@waline/emojis@1.2.0/bilibili
+    - https://unpkg.com/@waline/emojis@1.2.0/qq
+    - https://unpkg.com/@waline/emojis@1.2.0/tieba
+    - https://unpkg.com/@waline/emojis@1.2.0/tw-emoji
+  meta:
+    - nick
+    - mail
+    - link
+  requiredMeta:
+    - nick
+    - mail
+  wordLimit: 500
+  pageSize: 10
+  pageview: true
+
+########################################
+# Statistics - 不蒜子
+########################################
+footer:
+  since: 2024
+  powered: true
+  count: true
+  busuanzi: true
+
+########################################
+# Search - Algolia
+########################################
+algolia_search:
+  enable: true
+  appID: ""      # ⚠️ 请填写你的 Algolia App ID
+  apiKey: ""     # ⚠️ 请填写你的 Algolia Search-Only Key
+  indexName: ""  # ⚠️ 请填写你的 Algolia Index Name
+
+########################################
+# Code Block Settings
+########################################
+code_block:
+  expand: true
+
+clipboard:
+  success:
+    zh-CN: 复制成功 (*^▽^*)
+  fail:
+    zh-CN: 复制失败 (ﾟ⊿ﾟ)ﾂ
+  copyright:
+    enable: false
+    count: 50
+    license_type: by-nc-sa
+
+########################################
+# Article Copyright
+########################################
+article_copyright:
+  enable: false
+  content:
+    author: true
+    link: true
+    title: false
+    date: false
+    updated: false
+    license: true
+    license_type: by-nc-sa
+
+########################################
+# Math & Diagrams
+########################################
+math:
+  katex:
+    enable: true
+
+mermaid:
+  zoom: true
+
+########################################
+# Animation & Effects
+########################################
+animation:
+  enable: true
+  options:
+    header:
+      title: slide-up
+      subTitle: slide-down
+    home:
+      post: fade-up
+      widget: fade-up
+      sidebar: fade-up
+    article:
+      whole: fade-up
+      date: zoom-in
+      category: zoom-in
+      tag: zoom-in
+      comment: zoom-in
+      reading: zoom-in
+      nav: fade-up
+    archive:
+      whole: fade-up
+      tag: zoom-in
+      category: zoom-in
+      section: fade-up
+      nav: fade-up
+
+firework:
+  enable: true
+  disable_on_mobile: false
+  options:
+    excludeElements: ["a", "button"]
+    particles:
+      - shape: circle
+        move: ["emit"]
+        easing: easeOutExpo
+        colors: ["var(--red-1)", "var(--red-2)", "var(--red-3)", "var(--red-4)"]
+        number: 20
+        duration: [1200, 1800]
+        shapeOptions:
+          radius: [16, 32]
+          alpha: [0.3, 0.5]
+      - shape: circle
+        move: ["diffuse"]
+        easing: easeOutExpo
+        colors: ["var(--red-0)"]
+        number: 1
+        duration: [1200, 1800]
+        shapeOptions:
+          radius: 20
+          alpha: [0.2, 0.5]
+          lineWidth: 6
+
+########################################
+# Pangu.js - 自动空格
+########################################
+pangu:
+  enable: false
+
+########################################
+# Live2D (实验性)
+########################################
+live2d:
+  enable: false
+  position: left
+
+########################################
+# Sponsor
+########################################
+sponsor:
+  enable: false
+  tip:
+    zh-CN: 请作者喝杯咖啡吧
+  icon:
+    url: "../images/taichi.png"
+    rotate: true
+    mask: true
+
+########################################
+# Share
+########################################
+share:
+  - twitter
+  - facebook
+  - reddit
+  - telegram

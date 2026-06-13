@@ -1,0 +1,35 @@
+{{- with .Site.Title -}}
+<meta property="og:title" content="{{ . }}" />
+{{- end -}}
+{{- with .Site.Params.description -}}
+<meta property="og:description" content="{{ . }}" />
+{{- end -}}
+{{- with .Site.BaseURL -}}
+<meta property="og:url" content="{{ . }}" />
+{{- end -}}
+<meta property="og:type" content="website" />
+<meta property="og:site_name" content="{{ .Site.Title }}" />
+{{- if .IsPage -}}
+{{- with .Params.cover -}}
+<meta property="og:image" content="{{ . | absURL }}" />
+{{- end -}}
+{{- else -}}
+{{- with .Site.Params.banner -}}
+<meta property="og:image" content="{{ . | absURL }}" />
+{{- end -}}
+{{- end -}}
+
+{{- with .Site.Title -}}
+<meta name="twitter:title" content="{{ . }}" />
+{{- end -}}
+{{- with .Site.Params.description -}}
+<meta name="twitter:description" content="{{ . }}" />
+{{- end -}}
+<meta name="twitter:card" content="summary_large_image" />
+{{- with .Params.cover -}}
+<meta name="twitter:image" content="{{ . | absURL }}" />
+{{- else -}}
+{{- with .Site.Params.banner -}}
+<meta name="twitter:image" content="{{ . | absURL }}" />
+{{- end -}}
+{{- end -}}

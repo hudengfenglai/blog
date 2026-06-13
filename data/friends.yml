@@ -1,8 +1,13 @@
-- name: D-Sketon
-  url: https://d-sketon.github.io/
-  desc: Hexo 建站
-  image: https://d-sketon.github.io/avatar/avatar.webp
-- name: D-Sketon
-  url: https://d-sketon.github.io/astro-theme-reimu/
-  desc: Astro 建站
-  image: https://d-sketon.github.io/avatar/avatar.webp
+# 友链列表
+# 请在此添加你的友链信息
+# 格式：
+# - name: 网站名称
+#   url: https://网站地址.com
+#   desc: 一句话简介
+#   image: https://头像图片链接
+
+# 示例（可删除或替换为真实链接）：
+# - name: D-Sketon
+#   url: https://d-sketon.github.io/
+#   desc: Hexo 建站
+#   image: https://d-sketon.github.io/avatar/avatar.webp
